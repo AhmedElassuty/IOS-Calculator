@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
 
 @property IBOutlet UICollectionView* collectionView;
 @property IBOutlet UIView* resultView;
@@ -16,6 +16,8 @@
 @property IBOutlet UILabel* operationLabel;
 @property IBOutlet UILabel* firstNumberLabel;
 @property IBOutlet UILabel* secondNumberLabel;
+@property IBOutlet UIPageControl* scientificPageControl;
+@property IBOutlet UICollectionView* scientificCollectionView;
 
 @end
 

@@ -14,6 +14,7 @@
 		01429A971C691CD400C9FAB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01429A951C691CD400C9FAB6 /* Main.storyboard */; };
 		01429A991C691CD400C9FAB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01429A981C691CD400C9FAB6 /* Assets.xcassets */; };
 		01429A9C1C691CD400C9FAB6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01429A9A1C691CD400C9FAB6 /* LaunchScreen.storyboard */; };
+		01B443171C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B443161C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.m */; };
 		01B5BE4F1C6A50E300CC4449 /* KeyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE4E1C6A50E300CC4449 /* KeyCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,8 @@
 		01429A981C691CD400C9FAB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01429A9B1C691CD400C9FAB6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01429A9D1C691CD400C9FAB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01B443151C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScientificKeyCollectionViewCell.h; sourceTree = "<group>"; };
+		01B443161C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScientificKeyCollectionViewCell.m; sourceTree = "<group>"; };
 		01B5BE4D1C6A50E300CC4449 /* KeyCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyCollectionViewCell.h; sourceTree = "<group>"; };
 		01B5BE4E1C6A50E300CC4449 /* KeyCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyCollectionViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,6 +80,8 @@
 				01429A8C1C691CD400C9FAB6 /* Supporting Files */,
 				01255ED41C6E352A00635FD7 /* UILabel+Utils.h */,
 				01255ED51C6E352A00635FD7 /* UILabel+Utils.m */,
+				01B443151C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.h */,
+				01B443161C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.m */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01429A941C691CD400C9FAB6 /* ViewController.m in Sources */,
+				01B443171C6FAAC0002BD581 /* ScientificKeyCollectionViewCell.m in Sources */,
 				01429A911C691CD400C9FAB6 /* AppDelegate.m in Sources */,
 				01255ED61C6E352A00635FD7 /* UILabel+Utils.m in Sources */,
 				01B5BE4F1C6A50E300CC4449 /* KeyCollectionViewCell.m in Sources */,
@@ -275,6 +281,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Calculator/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = guc.edu.eg.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -286,6 +293,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Calculator/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = guc.edu.eg.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";

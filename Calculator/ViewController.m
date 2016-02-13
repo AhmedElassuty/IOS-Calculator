@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "KeyCollectionViewCell.h"
+#import "ScientificKeyCollectionViewCell.h"
 #import "UILabel+Utils.h"
 
 @interface ViewController ()
@@ -46,6 +47,17 @@
     layout.minimumInteritemSpacing = 10;
     _collectionView.collectionViewLayout = layout;
     
+
+    // Prepare collection view layout
+    UICollectionViewFlowLayout* scientificLayout = [UICollectionViewFlowLayout new];
+    scientificLayout.sectionInset = UIEdgeInsetsMake(4,4,4,4);
+    scientificLayout.minimumLineSpacing = 10;
+    scientificLayout.minimumInteritemSpacing = 5;
+    scientificLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    _scientificCollectionView.collectionViewLayout = scientificLayout;
+    
+
+    
     // Add undo recognizer to the second label
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(undoCharacterSwipeGesture:)];
     swipe.direction = UISwipeGestureRecognizerDirectionLeft;
@@ -65,6 +77,16 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // Scientific Collection View
+    if (collectionView == _scientificCollectionView) {
+        UICollectionViewFlowLayout* layout = (UICollectionViewFlowLayout *)[collectionView collectionViewLayout];
+        CGFloat width = ([UIScreen mainScreen].bounds.size.width - 16.0 -  [layout minimumInteritemSpacing] * 4. - [layout sectionInset].left - [layout sectionInset].right * 2)/5;
+        CGFloat height = (collectionView.bounds.size.height - [layout sectionInset].top * 3. - [layout sectionInset].bottom * 3.)/3;
+        return CGSizeMake(width, height);
+    }
+    
+    // Main Collection View
     UICollectionViewFlowLayout* layout = (UICollectionViewFlowLayout *)[collectionView collectionViewLayout];
     CGFloat width = (collectionView.bounds.size.width -  [layout minimumInteritemSpacing] * 3.0 - [layout sectionInset].right - [layout sectionInset].left)/4;
     CGFloat height = (collectionView.bounds.size.height - [layout sectionInset].top * 4. - [layout sectionInset].bottom * 4.)/4;
@@ -75,20 +97,38 @@
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    if (collectionView == _scientificCollectionView)
+        return 3;
+    
     return 4;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if (collectionView == _scientificCollectionView)
+        return 15;
+    
     return 4;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    // Scientific Collection View
+    if (collectionView == _scientificCollectionView) {
+        ScientificKeyCollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ScientificKeyCollectionViewCell" forIndexPath:indexPath];
+        [cell constructCell:indexPath.item];
+        return cell;
+    }
+
+    // Main Collection View
     KeyCollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"KeyCollectionViewCell" forIndexPath:indexPath];
-    [(KeyCollectionViewCell *)cell constructCell:indexPath.item + (indexPath.section * 4) width:cell.bounds.size.width];
+    [cell constructCell:indexPath.item + (indexPath.section * 4) width:cell.bounds.size.width];
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (collectionView == _scientificCollectionView) {
+        return;
+    }
+    
     KeyCollectionViewCell* cell = (KeyCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     NSInteger itemNumber = indexPath.item + (indexPath.section * 4);
     
@@ -156,6 +196,16 @@
 
         _secondNumberLabel.text = [_secondNumberLabel.text  stringByAppendingString:cell.valueLabel.text];
     }
+}
+//
+//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    CGFloat pageWidth = _scientificCollectionView.frame.size.height;
+//    _scientificPageControl.currentPage = _scientificCollectionView.contentOffset.y / pageWidth;
+//}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat pageWidth = _scientificCollectionView.frame.size.width;
+    _scientificPageControl.currentPage = _scientificCollectionView.contentOffset.x / pageWidth;
 }
 
 -(void) toggleUndoTip {

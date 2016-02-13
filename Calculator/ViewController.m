@@ -20,10 +20,6 @@
 
 @implementation ViewController
 
--(void)viewDidLayoutSubviews{
-    
-}
-
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self performSelector:@selector(toggleUndoTip) withObject:nil afterDelay:1.f];
@@ -33,6 +29,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
+//    [[[self navigationController] navigationBar] clipsToBounds]
+    [self.view setBackgroundColor:[UIColor colorWithRed:39/255.0f
+                                                  green:44/255.0f
+                                                   blue:93/255.0f
+                                                  alpha:1.f]];
+    
     _operationView.layer.cornerRadius = 15;
     _operationView.layer.borderWidth = 1;
     _operationView.layer.borderColor = [UIColor colorWithRed:151/255.0f
@@ -55,9 +57,7 @@
     scientificLayout.minimumInteritemSpacing = 5;
     scientificLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     _scientificCollectionView.collectionViewLayout = scientificLayout;
-    
 
-    
     // Add undo recognizer to the second label
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(undoCharacterSwipeGesture:)];
     swipe.direction = UISwipeGestureRecognizerDirectionLeft;
@@ -97,16 +97,14 @@
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    if (collectionView == _scientificCollectionView)
-        return 3;
+    if (collectionView == _scientificCollectionView) return 3;
     
     return 4;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (collectionView == _scientificCollectionView)
-        return 15;
-    
+    if (collectionView == _scientificCollectionView) return 15;
+
     return 4;
 }
 
@@ -125,10 +123,27 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    // Scientific Collection View
     if (collectionView == _scientificCollectionView) {
+        UIAlertController * premiumAlert = [UIAlertController
+                                      alertControllerWithTitle:@"Premium Feature"
+                                      message:@"This is a premium feature."
+                                      preferredStyle:UIAlertControllerStyleAlert];
+        
+        [self presentViewController:premiumAlert animated:YES completion:nil];
+        UIAlertAction* gotIt = [UIAlertAction
+                             actionWithTitle:@"Got it"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [self dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+        [premiumAlert addAction:gotIt];
         return;
     }
     
+    // Main Collection View
     KeyCollectionViewCell* cell = (KeyCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     NSInteger itemNumber = indexPath.item + (indexPath.section * 4);
     
@@ -197,11 +212,6 @@
         _secondNumberLabel.text = [_secondNumberLabel.text  stringByAppendingString:cell.valueLabel.text];
     }
 }
-//
-//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//    CGFloat pageWidth = _scientificCollectionView.frame.size.height;
-//    _scientificPageControl.currentPage = _scientificCollectionView.contentOffset.y / pageWidth;
-//}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat pageWidth = _scientificCollectionView.frame.size.width;

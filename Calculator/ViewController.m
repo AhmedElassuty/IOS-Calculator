@@ -11,10 +11,10 @@
 #import "ScientificKeyCollectionViewCell.h"
 #import "UILabel+Utils.h"
 
+//[TODO] Refactor the code when possible :D
 @interface ViewController ()
 
 @property BOOL isOperationSelected;
-@property NSString* lastAnswer;
 
 @end
 
@@ -29,7 +29,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
-//    [[[self navigationController] navigationBar] clipsToBounds]
     [self.view setBackgroundColor:[UIColor colorWithRed:39/255.0f
                                                   green:44/255.0f
                                                    blue:93/255.0f
@@ -77,6 +76,8 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    // [TODO] This logic is better to be assigned to the Layout
+    // since all cells have the same size
     
     // Scientific Collection View
     if (collectionView == _scientificCollectionView) {
@@ -90,9 +91,9 @@
     UICollectionViewFlowLayout* layout = (UICollectionViewFlowLayout *)[collectionView collectionViewLayout];
     CGFloat width = (collectionView.bounds.size.width -  [layout minimumInteritemSpacing] * 3.0 - [layout sectionInset].right - [layout sectionInset].left)/4;
     CGFloat height = (collectionView.bounds.size.height - [layout sectionInset].top * 4. - [layout sectionInset].bottom * 4.)/4;
-    if (width < height) {
-        return CGSizeMake(width, width);
-    }
+
+    if (width < height) return CGSizeMake(width, width);
+
     return CGSizeMake(height, height);
 }
 
@@ -162,12 +163,25 @@
     if([KeyCollectionViewCell isOperationKey:itemNumber]){
         if (!_secondNumberLabel.isEmpty || !_firstNumberLabel.isEmpty) {
             // Equal operation
+            
+            // [TODO] Use NSNumberFormatter and get it work
+            // with NSExpression [case Handling ',' formats]
+
+            // Handle "."
+            if ([_secondNumberLabel.text isEqual:@"."]) return;
+            
+            // [BUG TODO] Equal operation will remove the trailing . and updates
+            // the view
+            if ([_secondNumberLabel.text hasSuffix:@"."])
+                _secondNumberLabel.text = [_secondNumberLabel.text substringToIndex:_secondNumberLabel.text.length - 1];
+
             if (itemNumber == 14) {
-                // select operation !!
+                // Equal Operation
+
                 if (_operationLabel.isEmpty || _secondNumberLabel.isEmpty || _firstNumberLabel.isEmpty) return;
                 
                 // Perform calculations
-
+                
                 // Replace operations signs
                 NSString *modifiedOperationString = [_operationLabel.text stringByReplacingOccurrencesOfString:@"÷" withString:@"/"];
                 modifiedOperationString = [modifiedOperationString stringByReplacingOccurrencesOfString:@"x" withString:@"*"];
@@ -204,9 +218,12 @@
         if ([_secondNumberLabel.text containsString:@"."] && [cell.valueLabel.text  isEqual:@"."]) return;
 
         // Handle leading zeros
-        if ([_secondNumberLabel.text hasPrefix:@"0"]) {
+        if ([_secondNumberLabel.text hasPrefix:@"0"] && _secondNumberLabel.text.length  == 1) {
             if ([cell.valueLabel.text isEqual:@"0"]) return;
-            _secondNumberLabel.text = @"";
+            
+            // Handling 0. case other wise replace the trailing zero
+            // like apple calculator
+            if (![cell.valueLabel.text isEqual:@"."]) _secondNumberLabel.text = @"";
         }
 
         _secondNumberLabel.text = [_secondNumberLabel.text  stringByAppendingString:cell.valueLabel.text];

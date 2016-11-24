@@ -10,10 +10,12 @@
 #import "KeyCollectionViewCell.h"
 #import "ScientificKeyCollectionViewCell.h"
 #import "UILabel+Utils.h"
+#import <CoreBluetooth/CoreBluetooth.h>
 
 //[TODO] Refactor the code when possible :D
-@interface ViewController ()
+@interface ViewController () <CBCentralManagerDelegate>
 
+@property (nonatomic) CBCentralManager *bluetoothManager;
 @property BOOL isOperationSelected;
 
 @end
@@ -28,6 +30,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    _bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self
+                                                             queue:nil
+                                                options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0]
+                                                forKey:CBCentralManagerOptionShowPowerAlertKey]];
 
     [self.view setBackgroundColor:[UIColor colorWithRed:39/255.0f
                                                   green:44/255.0f
@@ -93,7 +100,6 @@
     CGFloat height = (collectionView.bounds.size.height - [layout sectionInset].top * 4. - [layout sectionInset].bottom * 4.)/4;
 
     if (width < height) return CGSizeMake(width, width);
-
     return CGSizeMake(height, height);
 }
 
@@ -260,5 +266,14 @@
         }];
     }];
 }
+
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    NSLog(@"Heeree");
+    if (_bluetoothManager.state == CBCentralManagerStatePoweredOff) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"Please turn on Bluetooth in Settings" delegate: nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
 
 @end
